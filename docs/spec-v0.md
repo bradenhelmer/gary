@@ -31,7 +31,7 @@ This is the rough grammar definition for the gary language.
 
 'E' denotes the empty symbol.
 
-Punctuation tokens and reseved keywords are enclosed in quotes.
+Punctuator tokens and reseved keywords are enclosed in quotes.
 
 ```
 
