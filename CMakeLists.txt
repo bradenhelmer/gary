@@ -14,14 +14,21 @@ file(GLOB_RECURSE SRC "${CMAKE_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE HEADERS "${CMAKE_SOURCE_DIR}/include/*.h")
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
-add_executable(garyc ${SRC})
+add_library(Gary STATIC ${SRC})
 
-# Test
+set(GARYC_MAIN "${CMAKE_SOURCE_DIR}/tools/garyc.cpp")
+add_executable(garyc ${GARYC_MAIN})
+target_link_libraries(garyc Gary)
+
+# # Test
 file(GLOB_RECURSE TEST_SRC "${CMAKE_SOURCE_DIR}/tests/test_*.cpp")
 add_executable(garyc-tests ${TEST_SRC})
+target_link_libraries(garyc-tests Gary)
 add_custom_target(
   test
-  "${CMAKE_BINARY_DIR}/garyc-tests"
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/tests/resources
+          ${CMAKE_BINARY_DIR}/resources
+  COMMAND "${CMAKE_BINARY_DIR}/garyc-tests"
   DEPENDS garyc-tests)
 
 # Format

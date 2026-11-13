@@ -40,3 +40,54 @@ void Lexer::printFile() {
         std::cout << start[i];
     }
 }
+
+void Lexer::eatWhitespace() {
+    while (*curr == ' ' || *curr == '\t' || *curr == '\r') {
+        curr++;
+        curr_col++;
+    }
+}
+
+Token Lexer::lexToken() {
+    eatWhitespace();
+
+    Token token;
+
+    switch (*curr) {
+    case '[':
+        token.kind = TokenKind::l_brace;
+        break;
+    case ']':
+        token.kind = TokenKind::r_square;
+        break;
+    case '(':
+        token.kind = TokenKind::l_paren;
+        break;
+    case ')':
+        token.kind = TokenKind::r_paren;
+        break;
+    case '*':
+        token.kind = TokenKind::star;
+        break;
+    case '+':
+        token.kind = TokenKind::plus;
+        break;
+    case '-':
+        token.kind = TokenKind::minus;
+        break;
+    case '/':
+        token.kind = TokenKind::slash;
+        break;
+    case '%':
+        token.kind = TokenKind::percent;
+        break;
+    case ':':
+        token.kind = TokenKind::colon;
+        break;
+    case ';':
+        token.kind = TokenKind::semi;
+    case ',':
+        token.kind = TokenKind::comma;
+        break;
+    }
+}

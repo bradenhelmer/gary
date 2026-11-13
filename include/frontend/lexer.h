@@ -1,5 +1,6 @@
 #pragma once
 
+#include "frontend/token.h"
 #include <string>
 
 // Lexer class definition.
@@ -20,10 +21,13 @@ private:
     int curr_col;
 
     void init();
+    void eatWhitespace();
 
 public:
     Lexer(std::string &&input_filename);
     ~Lexer();
 
     void printFile();
+    const std::string &getFilename() const { return input_filename; }
+    Token lexToken();
 };

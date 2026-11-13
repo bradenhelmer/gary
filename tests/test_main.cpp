@@ -2,10 +2,13 @@
 #include <cassert>
 #include <cstdio>
 
+extern void test_lexer_main();
+
 using std::printf;
 
 int main(int argc, char *argv[]) {
-    assert(1 == 1);
+    test_lexer_main();
+
     printf("All tests passed.\n");
     return 0;
 }
