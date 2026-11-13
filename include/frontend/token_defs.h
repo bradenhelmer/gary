@@ -53,6 +53,7 @@ GARY_PUNCTUATOR(greater, ">")
 GARY_PUNCTUATOR(greaterequal, ">=")
 GARY_PUNCTUATOR(exclaimequal, "!=")
 GARY_PUNCTUATOR(equalequal, "==")
+GARY_PUNCTUATOR(arrow, "->")
 
 #undef GARY_TOKEN
 #undef GARY_KEYWORD
