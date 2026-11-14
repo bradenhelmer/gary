@@ -1,4 +1,5 @@
 #include "frontend/lexer.h"
+#include <cctype>
 #include <fcntl.h>
 #include <iostream>
 #include <stdexcept>
@@ -48,46 +49,142 @@ void Lexer::eatWhitespace() {
     }
 }
 
+Token Lexer::lexIdOrKeyword() {
+    // Here we assume curr is at the second position of the identifier.
+    char *start = curr - 1;
+    auto isIdChar = [&](char c) { return isdigit(c) || isalpha(c) || c == '_'; };
+    while (isIdChar(*curr)) {
+        curr++;
+    }
+    std::string_view lexeme(start, curr - start);
+    auto it = keywordMap.find(lexeme);
+    if (it != keywordMap.end()) {
+        return Token(it->second, lexeme);
+    }
+    return Token(TokenKind::id, lexeme);
+}
+
+Token Lexer::lexIntOrFloatLiteral() { return Token(TokenKind::int_literal); }
+
+Token Lexer::lexComment() {
+    // Here we assume curr is at the first character after the '//'
+    while (*curr != '\n') {
+        curr++;
+    }
+    return Token(TokenKind::comment);
+}
+
 Token Lexer::lexToken() {
     eatWhitespace();
 
-    Token token;
-
-    switch (*curr) {
+    const char peek = *(curr + 1);
+    curr_col++;
+    switch (*(curr++)) {
+    // Punctuator/start of punctuator cases.
     case '[':
-        token.kind = TokenKind::l_brace;
-        break;
+        return Token(TokenKind::l_brace);
     case ']':
-        token.kind = TokenKind::r_square;
-        break;
+        return Token(TokenKind::r_square);
     case '(':
-        token.kind = TokenKind::l_paren;
-        break;
+        return Token(TokenKind::l_paren);
     case ')':
-        token.kind = TokenKind::r_paren;
-        break;
+        return Token(TokenKind::r_paren);
+    case '{':
+        return Token(TokenKind::l_brace);
+    case '}':
+        return Token(TokenKind::r_brace);
     case '*':
-        token.kind = TokenKind::star;
-        break;
+        return Token(TokenKind::star);
     case '+':
-        token.kind = TokenKind::plus;
-        break;
+        return Token(TokenKind::plus);
     case '-':
-        token.kind = TokenKind::minus;
-        break;
+        if (*curr == '>') {
+            curr++;
+            curr_col++;
+            return Token(TokenKind::arrow);
+        }
+        return Token(TokenKind::minus);
     case '/':
-        token.kind = TokenKind::slash;
-        break;
+        if (*curr == '/') {
+            curr++;
+            curr_col++;
+            return lexComment();
+        }
+        return Token(TokenKind::slash);
     case '%':
-        token.kind = TokenKind::percent;
-        break;
+        return Token(TokenKind::percent);
+    case '<':
+        if (*curr == '=') {
+            curr++;
+            curr_col++;
+            return Token(TokenKind::lessequal);
+        }
+        return Token(TokenKind::less);
+    case '>':
+        if (*curr == '=') {
+            curr++;
+            curr_col++;
+            return Token(TokenKind::greaterequal);
+        }
+        return Token(TokenKind::greater);
+    case '!':
+        if (*curr == '=') {
+            curr++;
+            curr_col++;
+            return Token(TokenKind::exclaimequal);
+        }
+        throwLexError();
+    case '=':
+        if (*curr == '=') {
+            curr++;
+            curr_col++;
+            return Token(TokenKind::equalequal);
+        }
+        throwLexError();
     case ':':
-        token.kind = TokenKind::colon;
-        break;
+        return Token(TokenKind::colon);
     case ';':
-        token.kind = TokenKind::semi;
+        return Token(TokenKind::semi);
     case ',':
-        token.kind = TokenKind::comma;
-        break;
+        return Token(TokenKind::comma);
+    case '.':
+        if (*curr == '.') {
+            curr++;
+            curr_col++;
+            return Token(TokenKind::dotdot);
+        }
+        throwLexError();
+    // Newline
+    case '\n':
+        curr_line++;
+        return Token(TokenKind::newline);
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+        return lexIntOrFloatLiteral();
+    // Identifiers/Keywords
+    // clang-format off
+    case 'A': case 'B': case 'C': case 'D': case 'E':
+    case 'F': case 'G': case 'H': case 'I': case 'J':
+    case 'K': case 'L': case 'M': case 'N': case 'O':
+    case 'P': case 'Q': case 'R': case 'S': case 'T':
+    case 'U': case 'V': case 'W': case 'X': case 'Y':
+    case 'Z':
+    case 'a': case 'b': case 'c': case 'd': case 'e':
+    case 'f': case 'g': case 'h': case 'i': case 'j':
+    case 'k': case 'l': case 'm': case 'n': case 'o':
+    case 'p': case 'q': case 'r': case 's': case 't':
+    case 'u': case 'v': case 'w': case 'x': case 'y':
+    case 'z':
+    case '_':  
+        return lexIdOrKeyword();
+        // clang-format on
     }
 }

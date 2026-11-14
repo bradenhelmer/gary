@@ -1,0 +1,3 @@
+fn mm_test(x: i32, y: i32) {
+    return (min(x, y) - max(x, y)) / 1;
+}

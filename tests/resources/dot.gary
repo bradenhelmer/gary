@@ -1,0 +1,3 @@
+fn dot(n: i32, x: [f32], y: [f32]) -> f32 {
+    return reduce(i in 0..n, init 0.0) { acc + x[i]*y[i] };
+}

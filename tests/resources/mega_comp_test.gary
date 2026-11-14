@@ -1,0 +1,4 @@
+// Crazy test, evaluates to 4
+fn mega_comp_test() {
+    return (1 == 1) + (1 != 0) + (1 > 0) + (1 >= 0) + (1 < 0) + (1 <= 0);
+}

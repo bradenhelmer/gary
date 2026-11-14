@@ -1,6 +1,7 @@
 #pragma once
 
 #include "frontend/token.h"
+#include <format>
 #include <string>
 
 // Lexer class definition.
@@ -22,6 +23,14 @@ private:
 
     void init();
     void eatWhitespace();
+    Token lexComment();
+    Token lexIdOrKeyword();
+    Token lexIntOrFloatLiteral();
+    void throwLexError(int offset = 1) const {
+        throw std::runtime_error(std::format("Unknown token starting with '{}', at {}:{}:{}",
+                                             *(curr - offset), input_filename, curr_line,
+                                             curr_col - offset));
+    }
 
 public:
     Lexer(std::string &&input_filename);

@@ -32,4 +32,5 @@ add_custom_target(
   DEPENDS garyc-tests)
 
 # Format
-add_custom_target(format clang-format -i ${SRC} ${HEADERS} ${TEST_SRC})
+add_custom_target(format clang-format -i ${SRC} ${HEADERS} ${TEST_SRC}
+                         ${GARYC_MAIN})

@@ -1,0 +1,3 @@
+fn saxpy(n: i32, a: f32, x: [f32], y: [f32]) -> [f32] {
+    return map(i in 0..n) { a * x[i] + y[i] };
+}

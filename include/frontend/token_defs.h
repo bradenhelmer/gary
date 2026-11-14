@@ -7,7 +7,7 @@
 #endif
 
 #ifndef GARY_KEYWORD
-#define GARY_KEYWORD(NAME, SYMBOL) GARY_TOKEN(kw_##NAME)
+#define GARY_KEYWORD(NAME) GARY_TOKEN(kw_##NAME)
 #endif
 
 #ifndef GARY_PUNCTUATOR
@@ -20,17 +20,17 @@ GARY_TOKEN(newline)
 GARY_TOKEN(int_literal)
 GARY_TOKEN(float_literal)
 
-GARY_KEYWORD(f32, "f32")
-GARY_KEYWORD(i32, "i32")
-GARY_KEYWORD(fn, "fn")
-GARY_KEYWORD(return, "return")
-GARY_KEYWORD(init, "in")
-GARY_KEYWORD(map, "map")
-GARY_KEYWORD(reduce, "reduce")
-GARY_KEYWORD(acc, "acc")
-GARY_KEYWORD(sqrt, "sqrt")
-GARY_KEYWORD(min, "min")
-GARY_KEYWORD(max, "max")
+GARY_KEYWORD(f32)
+GARY_KEYWORD(i32)
+GARY_KEYWORD(fn)
+GARY_KEYWORD(return)
+GARY_KEYWORD(init)
+GARY_KEYWORD(map)
+GARY_KEYWORD(reduce)
+GARY_KEYWORD(acc)
+GARY_KEYWORD(sqrt)
+GARY_KEYWORD(min)
+GARY_KEYWORD(max)
 
 GARY_PUNCTUATOR(l_square, "[")
 GARY_PUNCTUATOR(r_square, "]")
